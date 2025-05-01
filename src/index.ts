@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { pool } from "./models/db";
 import { itemTableName } from "./models/tableNames";
+import { ItemsRouter } from "./routes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,9 +19,10 @@ app.get("/", (req: Request, res: Response) => {
 (async () => {
   await pool.query(`
         CREATE TABLE IF NOT EXISTS ${itemTableName} (
-        id SERIAL PRIMARY KEY,
-        Name TEXT NOT NULL
+          id SERIAL PRIMARY KEY,
+          name TEXT NOT NULL
         )
- `);
-  console.log("Table created");
+      `);
 })();
+
+app.use("/items", ItemsRouter);
