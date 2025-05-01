@@ -1,15 +1,26 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response } from "express";
+import { pool } from "./models/db";
+import { itemTableName } from "./models/tableNames";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Hello TypeScript with Express!');
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello TypeScript with Express!");
 });
- 
+
+(async () => {
+  await pool.query(`
+        CREATE TABLE IF NOT EXISTS ${itemTableName} (
+        id SERIAL PRIMARY KEY,
+        Name TEXT NOT NULL
+        )
+ `);
+  console.log("Table created");
+})();
