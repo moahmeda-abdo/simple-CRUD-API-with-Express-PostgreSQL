@@ -8,7 +8,7 @@ const router = Router();
 const DeleteItem: Middleware = async (req, res) => {
   const { id } = req.params;
   const result = await pool.query(
-    "DELETE FROM items WHERE id = $1 RETURNING *",
+    `DELETE FROM ${itemTableName} WHERE id = $1`,
     [id]
   );
   if (result.rows.length === 0) res.status(404).send("Item not found");
